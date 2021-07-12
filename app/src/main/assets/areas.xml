@@ -1,0 +1,63 @@
+<?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
+<areas>
+    <area>
+        <name>Israel</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>France</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Norway</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Greece</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>United States</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Germany</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Jordan</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Brazil</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>New Zealand</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>China</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Thailand</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Switzerland</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Australia</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Romania</name>
+        <time>00:01:00</time>
+    </area>
+    <area>
+        <name>Mexico</name>
+        <time>00:01:00</time>
+    </area>
+</areas>
