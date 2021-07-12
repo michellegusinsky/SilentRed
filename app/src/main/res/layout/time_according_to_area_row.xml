@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -10,12 +9,14 @@
         android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2196F3"
+        android:background="@drawable/area_time_row"
         android:orientation="horizontal"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,18 +27,24 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Area name: " />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Area name: "
+                android:textColor="#031944"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_areaName"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text=""
                 android:textColor="#050505"
-                android:textStyle="bold" />
+                 />
         </LinearLayout>
 
         <LinearLayout
@@ -51,16 +58,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Time to enter shelter" />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Time to enter shelter:"
+                android:textColor="#031944"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_time"
                 android:layout_width="194dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text=""
-                android:textColor="#FFFFFF"
-                android:textStyle="italic" />
+                android:textColor="#050505" />
         </LinearLayout>
 
     </LinearLayout>
