@@ -5,37 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:id="@+id/r" >
-    <LinearLayout
+    android:id="@+id/fragContainer" >
+    <fragment
+        android:id="@+id/count_down_fragment"
+        class="com.example.silentred.CountDownFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/massage_text"
-            android:layout_width="266dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginBottom="60dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Press to stop alarm"
-            android:textAlignment="center"
-            android:textSize="30dp" />
-
-        <Button
-            android:id="@+id/stop_btn"
-            android:layout_width="289dp"
-            android:layout_height="277dp"
-
-            android:layout_marginLeft="60dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/round_btn"
-            android:backgroundTint="#EEAF1616"
-            android:text="10"
-            android:textSize="70dp" />
-
-    </LinearLayout>
+        tools:layout="@layout/count_down_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
