@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.silentred">
-    // You need below permission to read contacts
+    package="com.example.silentred"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
+
+    <!-- permission declaration -->
+    <!-- You need below permission to read contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!--End permission declaration-->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,11 +23,28 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".TimeAreasActivity"></activity>
+        <!--static Broad cast Receiver-->
+        <!--If we need the App to listen the broadcast even if the App is closed we need Static Broadcast Receiver. -->
+        <receiver android:name=".NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.silentred.NOTIFICATION_LISTENER" />
+            </intent-filter>
+        </receiver>
+        <!--End static Broad cast Receiver-->
+
+        <service android:name="com.example.silentred.RedColorNotificationListenerService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

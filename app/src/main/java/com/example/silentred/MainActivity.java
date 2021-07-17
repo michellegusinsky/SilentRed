@@ -11,8 +11,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,27 +27,41 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-    private final int readContactCode=111;
+
+    private final int readContactCode = 111;
     private SettingFrag settingFrag;
-    private FragmentManager manager;
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        manager = (FragmentManager)getSupportFragmentManager();
-       settingFrag =  (SettingFrag)manager.findFragmentByTag("settingTag");
-       if(settingFrag!=null) {
-            manager.beginTransaction().remove(settingFrag).commit();
-       }
+        fragmentManager = getSupportFragmentManager();
+        // remove setting fragment to avoid more than 1 object of that fragment
+        settingFrag =  (SettingFrag) fragmentManager.findFragmentByTag("settingTag");
+        if(settingFrag != null) {
+            fragmentManager.beginTransaction().remove(settingFrag).commit();
+        }
 
         requestPermissions();
     }
+
     private void requestPermissions(){
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED )
         {
             ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS},readContactCode);
         }
+
+        // TODO: add isNotificationListenerAccessGranted(ComponentName listener) check before asking permission to listen to notifications
+      //  isNotificationListenerAccessGranted(new ComponentName())
+        if(!RedColorNotificationListenerService.isNotificationAccessEnabled) {
+            // open security settings - the user needs to allow listening to notifications
+            Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+            startActivity(intent);
+        }
+        // TODO: check if user didn't grantee this permission and show message that this app won't work properly (not alert when 'red color' app produce notification)
     }
 
     @Override
@@ -53,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted. Continue the action or workflow
                 // in your app.
-                Log.i("onRequestPermissionsResult", "Has permissions for Read Contact");
+                Log.i(RedColorNotificationListenerService.TAG, "onRequestPermissionsResult: Has permissions for Read Contact");
             } else {
-                Toast.makeText(this, "Contact content won't be read due the lack of Read Contact permission ", Toast.LENGTH_LONG).show();
+                // TODO: maybe to change this to dialog
+                Toast.makeText(this, "You won't be able to select person from your contacts as an emergency number due the lack of Read Contact permission ", Toast.LENGTH_LONG).show();
 
                 // Explain to the user that the feature is unavailable because
                 // the features requires a permission that the user has denied.
@@ -79,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -86,29 +107,36 @@ public class MainActivity extends AppCompatActivity {
         {
             case R.id.exit_b:
                 showExitDialog();
-
-                return true;
+                return super.onOptionsItemSelected(item);
 
             case R.id.settings:
-                settingFrag = new SettingFrag();
-                FragmentTransaction ft =manager.beginTransaction();
-                ft.add(R.id.fragContainer, settingFrag, "detailsTag");
-                ft.addToBackStack("BBB");
-                Fragment bottomFragment = manager.findFragmentById(R.id.count_down_fragment);
-                ft.hide(bottomFragment);
-                ft.commit();
-                manager.executePendingTransactions();
-                return true;
+                inflateSettingsFragment();
+                return super.onOptionsItemSelected(item);
+            default:
+                //TODO: add catch statement somewhere
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    void showExitDialog() {
+    private void inflateSettingsFragment() {
+        settingFrag = new SettingFrag();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.add(R.id.fragContainer, settingFrag, "detailsTag");
+        ft.addToBackStack("BBB");
+        // hide the count down fragment
+        Fragment bottomFragment = fragmentManager.findFragmentById(R.id.count_down_fragment);
+        if (bottomFragment != null) {
+            ft.hide(bottomFragment).commit();
+        }
+        fragmentManager.executePendingTransactions();
+    }
+
+    private void showExitDialog() {
         DialogFragment newFragment = MyAlertDialogFragment.newInstance("Are you sure you want to exit");
         newFragment.show(getSupportFragmentManager(),"exit message");
-
     }
 
+    // TODO: maybe need to ba changed to singleton instead of static
     public static class MyAlertDialogFragment extends DialogFragment {
 
         public static MyAlertDialogFragment newInstance(String title) {
@@ -121,36 +149,37 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            String title = getArguments().getString("title");
-
-            return new AlertDialog.Builder(getActivity())
-
+            String title = "";
+            if(getArguments() != null) {
+                title = getArguments().getString("title");
+            }
+            return new AlertDialog.Builder(requireActivity())
                     .setTitle(title)
                     .setPositiveButton("Yes",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity)getActivity()).doPositiveClick();
+                                    ((MainActivity) requireActivity()).doPositiveClick();
                                 }
                             }
                     )
                     .setNegativeButton("No",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    ((MainActivity)getActivity()).doNegativeClick();
+                                    ((MainActivity)requireActivity()).doNegativeClick();
                                 }
                             }
                     )
                     .create();
         }
     }
-
+    // exit dialog handle button ok
     public void doPositiveClick() {
         // Do stuff here.
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
         Log.i("FragmentAlertDialog", "Positive click!");
     }
-
+    // exit dialog handle button cancel
     public void doNegativeClick() {
         // Do stuff here.
         Log.i("FragmentAlertDialog", "Negative click!");
