@@ -11,6 +11,12 @@
     <!-- permission declaration -->
     <!-- You need below permission to read contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!-- Allows access to the flashlight -->
+    <permission android:name="android.permission.FLASHLIGHT"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_flashlight"
+        android:description="@string/permdesc_flashlight" />
     <!--End permission declaration-->
 
     <application
@@ -26,7 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TimeAreasActivity"></activity>
+        <activity android:name=".TimeAreasActivity"/>
         <!--static Broad cast Receiver-->
         <!--If we need the App to listen the broadcast even if the App is closed we need Static Broadcast Receiver. -->
         <receiver android:name=".NotificationReceiver"

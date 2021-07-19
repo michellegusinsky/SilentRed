@@ -12,10 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.Dialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,16 +42,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         requestPermissions();
+
+        // check for flashlight in the device
+        if(!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)){
+            // TODO: maybe to change this to dialog
+            Toast.makeText(this, "Flash light is not found in this device so when notification received from 'red color' app it won't turn on the flash light", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void requestPermissions(){
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED )
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS},readContactCode);
+            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS/*, Manifest.permission.CAMERA*/},readContactCode);
         }
 
-        // TODO: add isNotificationListenerAccessGranted(ComponentName listener) check before asking permission to listen to notifications
+        // TODO: add isNotificationListenerAccessGranted(ComponentName listener) check before asking permission to listen to notifications - now the check is not working
       //  isNotificationListenerAccessGranted(new ComponentName())
         if(!RedColorNotificationListenerService.isNotificationAccessEnabled) {
             // open security settings - the user needs to allow listening to notifications
@@ -68,25 +71,24 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == readContactCode) {// If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted. Continue the action or workflow
-                // in your app.
-                Log.i(RedColorNotificationListenerService.TAG, "onRequestPermissionsResult: Has permissions for Read Contact");
-            } else {
-                // TODO: maybe to change this to dialog
-                Toast.makeText(this, "You won't be able to select person from your contacts as an emergency number due the lack of Read Contact permission ", Toast.LENGTH_LONG).show();
+        switch (requestCode){
+            case readContactCode: // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Log.i(RedColorNotificationListenerService.TAG, "onRequestPermissionsResult: Has permissions for Read Contact");
+                } else {
+                    // TODO: maybe to change this to dialog
+                    Toast.makeText(this, "You won't be able to select person from your contacts as an emergency number due the lack of Read Contact permission ", Toast.LENGTH_LONG).show();
 
-                // Explain to the user that the feature is unavailable because
-                // the features requires a permission that the user has denied.
-                // At the same time, respect the user's decision. Don't link to
-                // system settings in an effort to convince the user to change
-                // their decision.
-
-            }
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                break;
         }
-        // Other 'case' lines to check for other
-        // permissions this app might request.
     }
 
 

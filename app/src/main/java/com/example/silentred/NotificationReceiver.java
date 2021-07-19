@@ -3,18 +3,32 @@ package com.example.silentred;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
+import android.os.Build;
 import android.util.Log;
+import androidx.annotation.RequiresApi;
 
 public class NotificationReceiver extends BroadcastReceiver {
-    public static final String intentAction = "com.example.silentred.NOTIFICATION_LISTENER";
+    public static final String intentNotificationReceivedAction = "com.example.silentred.NOTIFICATION_LISTENER";
+    public static final String intentStopButtonClickedAction = "com.example.silentred.STOP_BUTTON_CLICKED";
+    private FlashLightManager flashLightManager;
 
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(RedColorNotificationListenerService.TAG,"MainActivity.NotificationReceiver: onReceive()-start");
-        String temp = intent.getStringExtra("notification_event") + "\n";
-        System.out.println(temp);
+        String action = intent.getAction();
+        // notification received
+        if (action.equals(NotificationReceiver.intentNotificationReceivedAction)) {
+            // turn on camera led light
+            flashLightManager = new FlashLightManager(context, 50); // TODO: get the delayBlink according to user settings
+            Thread flashTread = new Thread(flashLightManager);
+            flashTread.start();
+        }
+        // stop button clicked received
+        if(action.equals(NotificationReceiver.intentStopButtonClickedAction)) {
+            flashLightManager.stopBlink();
+        }
+
         Log.i(RedColorNotificationListenerService.TAG,"MainActivity.NotificationReceiver: onReceive()-end");
     }
 }

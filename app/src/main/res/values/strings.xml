@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SilentRed</string>
+    <string name="permdesc_flashlight">flashlightPermissions</string>
+    <string name="permlab_flashlight">flashlight Permissions for turn on the flash when there is red color notification</string>
 </resources>
