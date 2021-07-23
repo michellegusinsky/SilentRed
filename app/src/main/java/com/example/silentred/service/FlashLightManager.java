@@ -1,6 +1,7 @@
 package com.example.silentred.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
@@ -13,8 +14,11 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.silentred.R;
+import com.example.silentred.activities.SettingFrag;
 
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class FlashLightManager implements Runnable{
@@ -23,14 +27,18 @@ public class FlashLightManager implements Runnable{
 
     private ArrayList<String> cameraWithFlashIds;
     private final CameraManager camManager;
-    private long delayBlink;
+    private long delayBlink=500;
     private Context context;
+
+    static final String fileName =("myPreferencesFile");
 
     public FlashLightManager(Context context, long delayBlink){
         this.context=context;
         camManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
-        this.delayBlink = delayBlink;
+        //this.delayBlink = delayBlink;
         cameraWithFlashIds = new ArrayList<>();
+        SettingFrag.sp =context.getSharedPreferences(fileName,MODE_PRIVATE);
+        this.delayBlink/=SettingFrag.sp.getInt("flashPerSecond",3);
         try {
             String[] cameraIds = camManager.getCameraIdList();
             for (String camera : cameraIds){
@@ -71,6 +79,7 @@ public class FlashLightManager implements Runnable{
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void blink(){
+        int i=1;
         stopButtonClicked = false;
         boolean lightOn = false;
         while (!stopButtonClicked){ // TODO: change this to interrupt maybe
@@ -80,9 +89,12 @@ public class FlashLightManager implements Runnable{
             }
             else {
                 turnOn();
+               System.out.println("-----   Blink   -----");
+               System.out.println("      "+i+"       ");
+               i++;
                 lightOn = true;
             }try{
-                Thread.sleep(delayBlink);
+                Thread.sleep(this.delayBlink);
             }catch (InterruptedException e){
                 // TODO: CHECK WHEN SLEEP THROWS EXCEPTION
                 e.printStackTrace();

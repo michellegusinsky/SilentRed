@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginTop="16dp"
-            android:max="5"
+            android:max="15"
             android:min="1"
             android:progress="1"
             android:progressTint="#FF2400"
@@ -71,7 +71,7 @@
         app:layout_constraintHorizontal_bias="0.781"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.396">
+        app:layout_constraintVertical_bias="0.474">
 
         <TextView
             android:id="@+id/emergency_content_title"
@@ -125,22 +125,22 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="389dp"
-        android:layout_height="144dp"
+        android:layout_width="388dp"
+        android:layout_height="110dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="480dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.053">
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
             android:id="@+id/Area_title"
             android:layout_width="match_parent"
-            android:layout_height="53dp"
+            android:layout_height="wrap_content"
             android:text="Area:"
             android:textAlignment="center"
             android:textSize="24sp"
@@ -154,12 +154,40 @@
             android:layout_height="62dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:background="@drawable/red_outline"
             android:scrollbarSize="8dp"
             android:textAlignment="center"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/red_outline"
-/>
+            app:layout_constraintStart_toStartOf="parent" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="377dp"
+        android:layout_height="88dp"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.647"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/username_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="UserName"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
