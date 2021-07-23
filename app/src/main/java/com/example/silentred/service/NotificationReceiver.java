@@ -11,6 +11,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     public static final String intentNotificationReceivedAction = "com.example.silentred.NOTIFICATION_LISTENER";
     public static final String intentStopButtonClickedAction = "com.example.silentred.STOP_BUTTON_CLICKED";
     private FlashLightManager flashLightManager;
+    private CountDownManager countDownManager;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -23,6 +24,9 @@ public class NotificationReceiver extends BroadcastReceiver {
             flashLightManager = new FlashLightManager(context, 50); // TODO: get the delayBlink according to user settings
             Thread flashTread = new Thread(flashLightManager);
             flashTread.start();
+            countDownManager = new CountDownManager();
+            Thread countDownThread = new Thread(countDownManager);
+            countDownThread.start();
         }
         // stop button clicked received
         if(action.equals(NotificationReceiver.intentStopButtonClickedAction)) {
