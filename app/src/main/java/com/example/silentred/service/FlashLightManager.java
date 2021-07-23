@@ -5,8 +5,14 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
+
+import com.example.silentred.R;
 
 import java.util.ArrayList;
 
@@ -18,8 +24,10 @@ public class FlashLightManager implements Runnable{
     private ArrayList<String> cameraWithFlashIds;
     private final CameraManager camManager;
     private long delayBlink;
+    private Context context;
 
     public FlashLightManager(Context context, long delayBlink){
+        this.context=context;
         camManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
         this.delayBlink = delayBlink;
         cameraWithFlashIds = new ArrayList<>();

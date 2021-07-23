@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.silentred.R;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private final int readContactCode = 111;
     private SettingFrag settingFrag;
     private FragmentManager fragmentManager;
+    public static Button countDownBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             // TODO: maybe to change this to dialog
             Toast.makeText(this, "Flash light is not found in this device so when notification received from 'red color' app it won't turn on the flash light", Toast.LENGTH_LONG).show();
         }
+
+        countDownBtn=findViewById(R.id.stop_btn);
     }
 
     private void requestPermissions(){
