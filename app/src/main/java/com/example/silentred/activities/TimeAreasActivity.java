@@ -25,7 +25,7 @@ public class TimeAreasActivity extends AppCompatActivity implements LifecycleOwn
             RecyclerView rvAreasAndTimes = findViewById(R.id.recycler_view);
 
             // Create adapter passing in the sample user data
-            AreasAndTimesAdapter adapter = new AreasAndTimesAdapter(this);
+            AreasAndTimesAdapter adapter = new AreasAndTimesAdapter(this, new AreasAndTimesAdapter.AreaDiff());
             // Attach the adapter to the recyclerview to populate items
             rvAreasAndTimes.setAdapter(adapter);
             // Set layout manager to position the items

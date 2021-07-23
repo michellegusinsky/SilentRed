@@ -2,6 +2,7 @@ package com.example.silentred.adapters;
 
 import android.content.Context;
 //import android.graphics.Color;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.silentred.viewModels.AreasAndTimesViewModel;
@@ -20,12 +25,12 @@ import com.example.silentred.model.Area;
 
 //import java.util.ArrayList;
 
-public class AreasAndTimesAdapter extends RecyclerView.Adapter<AreasAndTimesAdapter.MyViewHolder>{
+public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.MyViewHolder> {//RecyclerView.Adapter<AreasAndTimesAdapter.MyViewHolder>{
 
     // region members
    // private ArrayList<MyViewHolder> viewHolders;
    // private int row_index = -1;
-    protected AreasAndTimesViewModel model;
+    protected AreasAndTimesViewModel areasAndTimesViewModel;
     // private AreaListener clickListener;
     // endregion
 
@@ -34,16 +39,23 @@ public class AreasAndTimesAdapter extends RecyclerView.Adapter<AreasAndTimesAdap
     }*/
 
     // region Constructor
-    public AreasAndTimesAdapter(TimeAreasActivity activity){
+    public AreasAndTimesAdapter(TimeAreasActivity activity, @NonNull DiffUtil.ItemCallback<Area> diffCallback){
+        super(diffCallback);
         try {
-            //viewHolders = new ArrayList<>();
-            model = new ViewModelProvider(activity,
-                    ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication())).get(AreasAndTimesViewModel.class);
-            // model.getCountriesItems().observe(activity.getViewLifecycleOwner(), countries -> {
-            // update UI
-            //     countryItems = countries;
-            // });
+            //noinspection deprecation
+            areasAndTimesViewModel = ViewModelProviders.of(activity).get(AreasAndTimesViewModel.class);
+            // another version of the above line
+            // areasAndTimesViewModel = new ViewModelProvider(activity,
+           //         ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication())).get(AreasAndTimesViewModel.class);
+
           //  clickListener = activity;
+
+            // updates when areas change
+            areasAndTimesViewModel.getAreaItems().observe(activity, areas -> {
+                // Update the cached copy of the words in the adapter.
+                this.submitList(areas);
+            });
+
             Log.i("silentRed", "AreasAndTimesAdapter Constructor");
         } catch (Exception e){
             Log.e("silentRed", "AreasAndTimesAdapter Constructor Exception: " + e.getMessage());
@@ -178,10 +190,10 @@ public class AreasAndTimesAdapter extends RecyclerView.Adapter<AreasAndTimesAdap
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         try {
-            if (model.getAreaItems().getValue() == null) return;
+            if (areasAndTimesViewModel.getAreaItems().getValue() == null) return;
 
             // Get the data model based on position
-            Area area = model.getAreaItems().getValue().get(position);
+            Area area = areasAndTimesViewModel.getAreaItems().getValue().get(position);
 
             holder.bindData(area);
         } catch (Exception e){
@@ -194,13 +206,27 @@ public class AreasAndTimesAdapter extends RecyclerView.Adapter<AreasAndTimesAdap
     @Override
     public int getItemCount() {
         try {
-            if (model.getAreaItems().getValue() == null) return 0;
-            return model.getAreaItems().getValue().size();
+            if (areasAndTimesViewModel.getAreaItems().getValue() == null) return 0;
+            return areasAndTimesViewModel.getAreaItems().getValue().size();
 
         }catch (Exception e){
             Log.e("silentRed", "AreasAndTimesAdapter getItemCount Exception: " + e.getMessage());
         }
         return 0;
     }
+
     //endregion
+
+    public static class AreaDiff extends DiffUtil.ItemCallback<Area> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull Area oldItem, @NonNull Area newItem) {
+            return oldItem == newItem;
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Area oldItem, @NonNull Area newItem) {
+            return oldItem.getName().equals(newItem.getName());
+        }
+    }
 }

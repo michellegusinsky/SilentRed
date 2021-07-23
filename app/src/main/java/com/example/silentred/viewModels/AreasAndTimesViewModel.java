@@ -24,7 +24,6 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
     private LiveData<List<Area>> areasLiveData;
     private Application app;
  //   private MutableLiveData<Integer> itemSelectedLiveData;
-
     // endregion
 
     // region constructor
@@ -91,12 +90,10 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
     // region init methods
     private void initAreasList(){
         try {
-          //  areasLiveData = new MutableLiveData<>();
-            Context context = getApplication().getApplicationContext();
+            areasLiveData = new MutableLiveData<>();
             repository = new LoadAreasSQL(app);
             areasLiveData = repository.getAllAreas();
-            // ArrayList<Area> areaItems = LoadAreasXML.parseAreas(context);
-        //    areasLiveData.setValue(areaItems);
+            // ArrayList<Area> areaItems = LoadAreasXML.parseAreas(context); // for using xml
         }catch (Exception e){
             Log.e("silentRed", "AreasAndTimesViewModel initAreasList Exception: " + e.getMessage());
         }

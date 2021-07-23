@@ -16,28 +16,32 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 // Contains the database holder and serves as the main access point for the underlying connection to relational data
-@Database(entities = {Area.class}, version = 1)
+@Database(entities = {Area.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
+
+    abstract AreaDao getAreaDao(); //room implements this method
+
     private static final String DB_NAME = "area_db";
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    private static AppDatabase INSTANCE;
+    // marking the instance as volatile to ensure atomic access to the variable
+    private static volatile AppDatabase INSTANCE;
     private static Context mContext;
-    public abstract AreaDao getAreaDao(); //room implements this method
 
-    public static synchronized AppDatabase getAppDatabase(Context context){
-        if(INSTANCE == null){
-            mContext = context;
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DB_NAME)
-                    .fallbackToDestructiveMigration()
-                    .addCallback(sRoomDatabaseCallback)
-                    .build();
-                    // allow queries on the main thread
-                    // Don't do this on a real app! See PersistenceBasicSample for an example
-                    //.allowMainThreadQueries()
-                    //.build();
+    public static AppDatabase getAppDatabase(Context context){
+        if(INSTANCE == null) {
+            synchronized (AppDatabase.class) {
+               if (INSTANCE == null) {
+                    mContext = context;
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, DB_NAME)
+                            .allowMainThreadQueries()
+                            .addCallback(sRoomDatabaseCallback)
+                            .build();
+                }
+            }
         }
         return INSTANCE;
     }
@@ -47,11 +51,9 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // If you want to keep data through app restarts,
-            // comment out the following block
+            // To keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
                 // Populate the database in the background.
-                // If you want to start with more words, just add them.
                 AreaDao dao = INSTANCE.getAreaDao();
                 dao.deleteAll();
                 ArrayList<Area> areas = LoadAreasXML.parseAreas(mContext);
@@ -61,10 +63,6 @@ public abstract class AppDatabase extends RoomDatabase {
             });
         }
     };
-
-   // public void insertNewAreas(List<Area> areas){
-   //     getAreaDao().insertAll(areas);
-   // }
 
     public static void destroyInstance() {INSTANCE = null;}
 }
