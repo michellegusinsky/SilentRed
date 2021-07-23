@@ -60,15 +60,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestPermissions(){
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
+/*
+*         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS},readContactCode);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS},readSmsCode);
+        }*/
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.SEND_SMS},sendSMSCode);
+            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS,Manifest.permission.SEND_SMS},readContactCode);
         }
+       // if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+      //  {
+      //      ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.SEND_SMS},sendSMSCode);
+      //  }
 
         // TODO: add isNotificationListenerAccessGranted(ComponentName listener) check before asking permission to listen to notifications - now the check is not working
       //  isNotificationListenerAccessGranted(new ComponentName())
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case readContactCode: // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED&& grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     // Permission is granted. Continue the action or workflow
                     // in your app.
                     Log.i(RedColorNotificationListenerService.TAG, "onRequestPermissionsResult: Has permissions for Read Contact");
