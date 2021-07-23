@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.service;
 
 import android.content.Intent;
 import android.service.notification.NotificationListenerService;

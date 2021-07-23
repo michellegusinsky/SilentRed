@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.activities;
 
 
 import android.app.Activity;
@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.silentred.R;
 
 import static android.content.Context.MODE_PRIVATE;
 

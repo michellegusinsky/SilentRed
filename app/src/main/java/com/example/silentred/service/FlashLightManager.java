@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.service;
 
 import android.content.Context;
 import android.hardware.camera2.CameraAccessException;

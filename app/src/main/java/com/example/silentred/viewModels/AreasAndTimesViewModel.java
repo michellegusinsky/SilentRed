@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.viewModels;
 
 //import android.annotation.SuppressLint;
 import android.app.Application;
@@ -9,6 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.silentred.database.LoadAreasSQL;
+import com.example.silentred.model.Area;
+import com.example.silentred.xml.LoadAreasXML;
 
 import java.util.ArrayList;
 
@@ -85,7 +89,8 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
         try {
             areasLiveData = new MutableLiveData<>();
             Context context = getApplication().getApplicationContext();
-            ArrayList<Area> areaItems = LoadAreasXML.parseAreas(context);
+            ArrayList<Area> areaItems = LoadAreasSQL.getAreasFromDatabase(context);
+            // ArrayList<Area> areaItems = LoadAreasXML.parseAreas(context);
             areasLiveData.setValue(areaItems);
         }catch (Exception e){
             Log.e("silentRed", "AreasAndTimesViewModel initAreasList Exception: " + e.getMessage());

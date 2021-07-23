@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.silentred.adapters.AreasAndTimesAdapter;
+import com.example.silentred.R;
 
 public class TimeAreasActivity extends AppCompatActivity implements LifecycleOwner{//} , AreasAndTimesAdapter.AreaListener{
 

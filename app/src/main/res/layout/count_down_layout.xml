@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CountDownFragment"
+    tools:context=".activities.CountDownFragment"
     android:id="@+id/constraint_layout"
     android:background="#FFFAF2">
     <LinearLayout
@@ -12,31 +11,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/massage_text"
+        <TextView
+            android:id="@+id/stop_alarm_text"
             android:layout_width="266dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="70dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="120dp"
             android:layout_marginBottom="60dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Press to stop alarm"
+            android:text="@string/countDownTitle"
             android:textAlignment="center"
-            android:textSize="30dp" />
+            android:textColor="#070707"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/stop_btn"
             android:layout_width="289dp"
             android:layout_height="277dp"
 
-            android:layout_marginLeft="60dp"
+            android:layout_marginStart="60dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/round_btn"
             android:backgroundTint="#EEAF1616"
-            android:text="10"
-            android:textSize="70dp" />
+            android:textSize="70sp" />
 
+        <Button
+            android:id="@+id/open_areas_with_times_btn"
+            android:layout_width="289dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="14dp"
+            android:backgroundTint="#EEAF1616"
+            android:onClick="openAreasTimesBtnClicked"
+            android:text="@string/open_areas_and_times_to_enter_shelter"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

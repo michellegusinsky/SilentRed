@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +20,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import com.example.silentred.R;
+import com.example.silentred.service.RedColorNotificationListenerService;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -186,5 +190,8 @@ public class MainActivity extends AppCompatActivity {
         // Do stuff here.
         Log.i("FragmentAlertDialog", "Negative click!");
     }
-
+    public void openAreasTimesBtnClicked(View view){
+        Intent intent = new Intent(this, TimeAreasActivity.class);
+        startActivity(intent);
+    }
 }

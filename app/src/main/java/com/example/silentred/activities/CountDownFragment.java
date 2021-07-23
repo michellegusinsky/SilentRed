@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.silentred.service.NotificationReceiver;
+import com.example.silentred.R;
 
 public class CountDownFragment extends Fragment {
 
@@ -32,5 +35,4 @@ public class CountDownFragment extends Fragment {
                 );
                 super.onViewCreated(view, savedInstanceState);
         }
-
 }

@@ -1,4 +1,4 @@
-package com.example.silentred;
+package com.example.silentred.adapters;
 
 import android.content.Context;
 //import android.graphics.Color;
@@ -12,6 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.silentred.viewModels.AreasAndTimesViewModel;
+import com.example.silentred.R;
+import com.example.silentred.activities.TimeAreasActivity;
+import com.example.silentred.model.Area;
 
 //import java.util.ArrayList;
 

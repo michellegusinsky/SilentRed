@@ -1,14 +1,15 @@
-package com.example.silentred;
+package com.example.silentred.xml;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+
+import com.example.silentred.model.Area;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class LoadAreasXML {
@@ -49,7 +50,7 @@ public class LoadAreasXML {
                         else if (inTag.equalsIgnoreCase(KEY_NAME))
                             currentArea.setName(strTagText);
                         else if (inTag.equalsIgnoreCase(KEY_TIME))
-                            currentArea.setTime(Time.valueOf(strTagText));
+                            currentArea.setTime(strTagText);
                         inTag ="";
                         break;
                 }//switch
