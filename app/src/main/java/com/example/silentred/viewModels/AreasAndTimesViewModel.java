@@ -15,11 +15,14 @@ import com.example.silentred.model.Area;
 import com.example.silentred.xml.LoadAreasXML;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AreasAndTimesViewModel extends AndroidViewModel {
 
     // region members
-    private MutableLiveData<ArrayList<Area>> areasLiveData;
+    private LoadAreasSQL repository;
+    private LiveData<List<Area>> areasLiveData;
+    private Application app;
  //   private MutableLiveData<Integer> itemSelectedLiveData;
 
     // endregion
@@ -28,6 +31,7 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
     public AreasAndTimesViewModel(@NonNull Application application) {
         super(application);
         try {
+            app = application;
             initAreasList();
           //  initSelectedArea();
         }catch (Exception e){
@@ -37,7 +41,7 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
     // endregion
 
     // region getters
-    public LiveData<ArrayList<Area>> getAreaItems(){
+    public LiveData<List<Area>> getAreaItems(){
         try {
             if (areasLiveData == null) {
                 initAreasList();
@@ -87,15 +91,17 @@ public class AreasAndTimesViewModel extends AndroidViewModel {
     // region init methods
     private void initAreasList(){
         try {
-            areasLiveData = new MutableLiveData<>();
+          //  areasLiveData = new MutableLiveData<>();
             Context context = getApplication().getApplicationContext();
-            ArrayList<Area> areaItems = LoadAreasSQL.getAreasFromDatabase(context);
+            repository = new LoadAreasSQL(app);
+            areasLiveData = repository.getAllAreas();
             // ArrayList<Area> areaItems = LoadAreasXML.parseAreas(context);
-            areasLiveData.setValue(areaItems);
+        //    areasLiveData.setValue(areaItems);
         }catch (Exception e){
             Log.e("silentRed", "AreasAndTimesViewModel initAreasList Exception: " + e.getMessage());
         }
     }
+
 
   /*  private void initSelectedArea() {
         try {

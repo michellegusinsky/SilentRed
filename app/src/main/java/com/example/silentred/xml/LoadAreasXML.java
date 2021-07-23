@@ -2,6 +2,7 @@ package com.example.silentred.xml;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
 import com.example.silentred.model.Area;
 
@@ -18,6 +19,7 @@ public class LoadAreasXML {
     final static String KEY_TIME="time";
 
     public static ArrayList<Area> parseAreas(Context context){
+        Log.i("silentRed", "LoadAreasXML parseAreas start");
         ArrayList<Area> data = null;
         InputStream in = openAreasFile(context);
         XmlPullParserFactory xmlFactoryObject;

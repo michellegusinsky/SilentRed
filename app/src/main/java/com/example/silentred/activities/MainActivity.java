@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         // Do stuff here.
         Log.i("FragmentAlertDialog", "Negative click!");
     }
+
     public void openAreasTimesBtnClicked(View view){
         Intent intent = new Intent(this, TimeAreasActivity.class);
         startActivity(intent);
