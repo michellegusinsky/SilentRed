@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class SettingFrag extends Fragment implements OnClickListener  {
     // Declare
     static final int PICK_CONTACT = 123;
     static final String fileName =("myPreferencesFile");
-    private SharedPreferences sp;
+    public static SharedPreferences sp;
     private Button btn;
     private String toSaveArea;
     private String toSaveEmergencyName;
@@ -55,12 +56,16 @@ public class SettingFrag extends Fragment implements OnClickListener  {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         view.findViewById(R.id.EmergencyContact_btn).setOnClickListener(this);
         btn = view.findViewById(R.id.buttonSave);
+        EditText userText=view.findViewById(R.id.editTextTextPersonName);
+        userText.setText(sp.getString("userName",""));
         btn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 sp =getActivity().getSharedPreferences(fileName,MODE_PRIVATE);
                 SharedPreferences.Editor myEdit = sp.edit();
+                EditText userText=view.findViewById(R.id.editTextTextPersonName);
+                myEdit.putString("userName",userText.getText().toString());
                 if(flashChanged)
                     myEdit.putInt("flashPerSecond",toSaveflashPerSecond);
                 if(areaChanged)

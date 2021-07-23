@@ -31,6 +31,7 @@ import com.example.silentred.service.RedColorNotificationListenerService;
 public class MainActivity extends AppCompatActivity {
 
     private final int readContactCode = 111;
+    private final int sendSMSCode = 222;
     private SettingFrag settingFrag;
     private FragmentManager fragmentManager;
     public static Button countDownBtn;
@@ -62,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED)
         {
-            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS/*, Manifest.permission.CAMERA*/},readContactCode);
+            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.READ_CONTACTS},readContactCode);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,new String[]{ Manifest.permission.SEND_SMS},sendSMSCode);
         }
 
         // TODO: add isNotificationListenerAccessGranted(ComponentName listener) check before asking permission to listen to notifications - now the check is not working
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case readContactCode: // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission is granted. Continue the action or workflow
@@ -94,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
                     // At the same time, respect the user's decision. Don't link to
                     // system settings in an effort to convince the user to change
                     // their decision.
+                }
+                break;
+            case sendSMSCode:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.i(RedColorNotificationListenerService.TAG, "onRequestPermissionsResult: Has permissions for send SMS");
+                } else {
+                    // TODO: maybe to change this to dialog
+                    Toast.makeText(this, "You won't be able to send SMS to your emergency contact due the lack of send SMS permission ", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
