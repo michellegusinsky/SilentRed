@@ -13,6 +13,7 @@ import java.util.List;
 
 @Dao
 public interface AreaDao {
+
     @Query("SELECT * FROM area")
     LiveData<List<Area>> getAllAreas();
 

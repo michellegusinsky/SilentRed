@@ -26,12 +26,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     static final String fileName =("myPreferencesFile");
 
-    private FlashLightManager flashLightManager;
-    private CountDownManager countDownManager;
-    private String contactNumber;
-    private String contactName;
-    private String userName;
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,11 +34,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         // notification received
         if (action.equals(NotificationReceiver.intentNotificationReceivedAction)) {
             // turn on camera led light
-            flashLightManager = new FlashLightManager(context, 50); // TODO: get the delayBlink according to user settings
+            FlashLightManager flashLightManager = new FlashLightManager(context);
             Thread flashTread = new Thread(flashLightManager);
             flashTread.start();
             if(countDownEnable) {
-                countDownManager = new CountDownManager();
+                CountDownManager countDownManager = new CountDownManager(context);
                 Thread countDownThread = new Thread(countDownManager);
                 countDownThread.start();
             }
@@ -53,24 +47,25 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
         // stop button clicked received
         if(action.equals(NotificationReceiver.intentStopButtonClickedAction)) {
-            flashLightManager.stopBlink();
+            FlashLightManager.stopBlink();
         }
 
         Log.i(RedColorNotificationListenerService.TAG,"MainActivity.NotificationReceiver: onReceive()-end");
     }
+
     public void sendingSMS(Context context) {
 
         SettingFrag.sp = context.getSharedPreferences(fileName, MODE_PRIVATE);
-        contactName = SettingFrag.sp.getString("EmergencyName", "");
-        contactNumber = SettingFrag.sp.getString("EmergencyNumber", "");
-        userName = SettingFrag.sp.getString("userName","");
+        String contactName = SettingFrag.sp.getString("EmergencyName", "");
+        String contactNumber = SettingFrag.sp.getString("EmergencyNumber", "");
+        String userName = SettingFrag.sp.getString("userName", "");
         if (contactName == null || contactNumber == null || userName == null) return;
         if (contactName.isEmpty() || contactNumber.isEmpty() || userName.isEmpty()) return;
 
 
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             SmsManager sms = SmsManager.getDefault();
-            sms.sendTextMessage(contactNumber, null, "hello " + contactName + ", you are the emergency contact of" + userName + "and "+userName+" need your help", null, null);
+            sms.sendTextMessage(contactNumber, null, "hello " + contactName + " , you are the emergency contact of " + userName + " and "+ userName +" need your help", null, null);
 
             Toast.makeText(context, "SMS massage has sent to emergency contact", Toast.LENGTH_SHORT).show();
         }

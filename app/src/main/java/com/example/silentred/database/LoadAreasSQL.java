@@ -15,7 +15,7 @@ public class LoadAreasSQL {
     private LiveData<List<Area>> mAllAreas;
 
     public LoadAreasSQL(Application application) {
-        AppDatabase db = AppDatabase.getAppDatabase(application);
+        AppDatabase db = AppDatabase.getAppDatabase(application); // get Instance of database
         mAreaDao = db.getAreaDao();
         mAllAreas = mAreaDao.getAllAreas();
     }
@@ -35,34 +35,15 @@ public class LoadAreasSQL {
         return areasNames;
     }
 
+    // region We didn't use it
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(Area area) {
+    /*void insert(Area area) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             mAreaDao.insertArea(area);
         });
     }
     private static ArrayList<Area> areas;
-
-    public static ArrayList<Area> getAreasFromDatabase(Context context) {
-        //databaseThread
-        //databaseThread.start();
-        AppDatabase appDb = AppDatabase.getAppDatabase(context);
-
-     /*   AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                areas = new ArrayList<>(appDb.getAreaDao().getAllAreas());
-            }
-        });
-        ArrayList<Area> areas = new ArrayList<>(appDb.getAreaDao().getAllAreas());
-        if (areas != null){
-
-        }*/
-        return areas;
-    //     Room.databaseBuilder();
-    //      Room.inMemoryDatabaseBuilder();
-    }
 
     private static void insertAreasToDatabase(Context context){
         AppDatabase appDb = AppDatabase.getAppDatabase(context);
@@ -74,4 +55,6 @@ public class LoadAreasSQL {
         AppDatabase appDb = AppDatabase.getAppDatabase(context);
         appDb.getAreaDao().insertArea(area);
     }
+    */
+    // endregion
 }

@@ -22,9 +22,8 @@ public class CountDownFragment extends Fragment {
         @Override
         public void onViewCreated(View view, Bundle savedInstanceState){
            Button btn = view.findViewById(R.id.stop_btn);
-                btn.setOnClickListener(btn_stop -> {
-                        //TODO: implement this function: the count down text need to be updated
 
+                btn.setOnClickListener(btn_stop -> { // Called each time the button stop clickes
                         Intent intent = new Intent(getActivity(), NotificationReceiver.class);
                         intent.setAction(NotificationReceiver.intentStopButtonClickedAction);
                         // send to notification receiver for stop the flash light

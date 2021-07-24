@@ -12,14 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.silentred.adapters.AreasAndTimesAdapter;
 import com.example.silentred.R;
 
-public class TimeAreasActivity extends AppCompatActivity implements LifecycleOwner{//} , AreasAndTimesAdapter.AreaListener{
+import static com.example.silentred.common.Constants.APP_TAG;
+
+public class TimeAreasActivity extends AppCompatActivity implements LifecycleOwner{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.areas_and_times_recycle_layout);
-            Log.i("silentRed", "TimeAreasActivity onCreate");
+            Log.i(APP_TAG, "TimeAreasActivity onCreate");
 
             // Lookup the recyclerview in activity layout
             RecyclerView rvAreasAndTimes = findViewById(R.id.recycler_view);
@@ -29,17 +31,11 @@ public class TimeAreasActivity extends AppCompatActivity implements LifecycleOwn
             // Attach the adapter to the recyclerview to populate items
             rvAreasAndTimes.setAdapter(adapter);
             // Set layout manager to position the items
-            //or GreedLayout instead of LinearLayout
             rvAreasAndTimes.setLayoutManager(new LinearLayoutManager(this.getBaseContext()));
-            Log.i("silentRed", "TimeAreasActivity set adapter");
+            Log.i(APP_TAG, "TimeAreasActivity set adapter");
         } catch (Exception e) {
-            Log.e("silentRed", "TimeAreasActivity onCreate Exception: " + e.getMessage());
+            Log.e(APP_TAG, "TimeAreasActivity onCreate Exception: " + e.getMessage());
         }
     }
-
-   /* @Override
-    public void onClickArea() {
-
-    }*/
 }
 

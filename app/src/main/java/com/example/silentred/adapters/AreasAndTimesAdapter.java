@@ -1,18 +1,13 @@
 package com.example.silentred.adapters;
 
 import android.content.Context;
-//import android.graphics.Color;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-//import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -23,20 +18,15 @@ import com.example.silentred.R;
 import com.example.silentred.activities.TimeAreasActivity;
 import com.example.silentred.model.Area;
 
-//import java.util.ArrayList;
+import static com.example.silentred.common.Constants.APP_TAG;
 
-public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.MyViewHolder> {//RecyclerView.Adapter<AreasAndTimesAdapter.MyViewHolder>{
+
+public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.MyViewHolder> {
 
     // region members
-   // private ArrayList<MyViewHolder> viewHolders;
-   // private int row_index = -1;
     protected AreasAndTimesViewModel areasAndTimesViewModel;
-    // private AreaListener clickListener;
+    private static final String class_tag = AreasAndTimesAdapter.class.getName();
     // endregion
-
-  /*  public interface AreaListener {
-         void onClickArea();
-    }*/
 
     // region Constructor
     public AreasAndTimesAdapter(TimeAreasActivity activity, @NonNull DiffUtil.ItemCallback<Area> diffCallback){
@@ -44,11 +34,6 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
         try {
             //noinspection deprecation
             areasAndTimesViewModel = ViewModelProviders.of(activity).get(AreasAndTimesViewModel.class);
-            // another version of the above line
-            // areasAndTimesViewModel = new ViewModelProvider(activity,
-           //         ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication())).get(AreasAndTimesViewModel.class);
-
-          //  clickListener = activity;
 
             // updates when areas change
             areasAndTimesViewModel.getAreaItems().observe(activity, areas -> {
@@ -56,9 +41,9 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
                 this.submitList(areas);
             });
 
-            Log.i("silentRed", "AreasAndTimesAdapter Constructor");
+            Log.i(APP_TAG, class_tag +" Constructor");
         } catch (Exception e){
-            Log.e("silentRed", "AreasAndTimesAdapter Constructor Exception: " + e.getMessage());
+            Log.e(APP_TAG, class_tag +" Constructor Exception: " + e.getMessage());
         }
     }
     // endregion
@@ -73,10 +58,7 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
         // members: all views of item row
         private TextView nameTextView;
         private TextView timeTextView;
-    //    private View itemView;
-    //    private LinearLayout linearLayoutView;
-      //  private int backgroundColor;
-      //  private int position;
+        private static final String inner_class_tag = AreasAndTimesAdapter.MyViewHolder.class.getName();
         // endregion
 
         // region Constructor
@@ -84,13 +66,10 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             try {
-            //    this.itemView = itemView;
-            //    linearLayoutView = itemView.findViewById(R.id.linear_layout);
                 nameTextView = itemView.findViewById(R.id.textView_areaName);
                 timeTextView = itemView.findViewById(R.id.textView_time);
-              //  backgroundColor = R.color.teal_200;
             } catch (Exception e) {
-                Log.e("silentRed", "AreasAndTimesAdapter.MyViewHolder Constructor Exception: " + e.getMessage());
+                Log.e(APP_TAG, inner_class_tag+" Constructor Exception: " + e.getMessage());
             }
         }
         // endregion
@@ -100,64 +79,11 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
                 // Set item views based on your views and data model
                 nameTextView.setText(area.getName());
                 timeTextView.setText(area.getTime());
-             //   position =getAdapterPosition();
-                // defined listeners to view widget
-                //setOnLongClickListener(area);
-
-                // defined listeners to view widget
-                //setOnClickListener(area, this);
 
             } catch (Exception e) {
-                Log.e("silentRed", "AreasAndTimesAdapter.MyViewHolder bindData Exception: " + e.getMessage());
+                Log.e(APP_TAG, inner_class_tag+" bindData Exception: " + e.getMessage());
             }
         }
-
-        // region Events register + handle
-    /*    private void setOnLongClickListener(Area area){
-            try {
-                itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (model.getAreaItems().getValue() == null) return false;
-                        if (model.getAreaItems().getValue().contains(area)) {
-                            model.getAreaItems().getValue().remove(area);
-                            notifyDataSetChanged();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-            }catch (Exception e) {
-                Log.e("silentRed", "AreasAndTimesAdapter.MyViewHolder setOnLongClickListener Exception: " + e.getMessage());
-            }
-        }*/
-
-        // change the color of the row to white when clicked
-       /* private void setOnClickListener(Area area, MyViewHolder owner){
-            try {
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        row_index=position;
-                        notifyDataSetChanged();
-                        clickListener.onClickArea(); }
-                });
-                if(row_index==position){
-                    linearLayoutView.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-                    timeTextView.setTextColor(Color.parseColor("#FF000000"));
-                    model.setSelectedArea(position);
-                }
-                else
-                {
-                    linearLayoutView.setBackgroundColor(Color.parseColor("#FF2196F3"));
-                    timeTextView.setTextColor(Color.parseColor("#FFFFFFFF"));
-                }
-
-            }catch (Exception e) {
-                Log.e("silentRed", "AreasAndTimesAdapter.MyViewHolder setOnClickListener Exception: " + e.getMessage());
-            }
-        }
-        // endregion*/
     }
     // endregion
 
@@ -175,11 +101,9 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
             View areaView = inflater.inflate(R.layout.time_according_to_area_row, parent, false);
 
             // Return a new holder instance
-           // MyViewHolder viewHolder = new MyViewHolder(areaView);
-            //viewHolders.add(viewHolder);
             return new MyViewHolder(areaView);
         } catch (Exception e){
-            Log.e("silentRed", "AreasAndTimesAdapter onCreateViewHolder Exception: " + e.getMessage());
+            Log.e(APP_TAG, class_tag+" onCreateViewHolder Exception: " + e.getMessage());
         }
         return null;
     }
@@ -197,7 +121,7 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
 
             holder.bindData(area);
         } catch (Exception e){
-            Log.e("silentRed", "AreasAndTimesAdapter onBindViewHolder Exception: " + e.getMessage());
+            Log.e(APP_TAG, class_tag+" onBindViewHolder Exception: " + e.getMessage());
         }
     }
 
@@ -210,11 +134,10 @@ public class AreasAndTimesAdapter extends ListAdapter<Area,AreasAndTimesAdapter.
             return areasAndTimesViewModel.getAreaItems().getValue().size();
 
         }catch (Exception e){
-            Log.e("silentRed", "AreasAndTimesAdapter getItemCount Exception: " + e.getMessage());
+            Log.e(APP_TAG, class_tag+" getItemCount Exception: " + e.getMessage());
         }
         return 0;
     }
-
     //endregion
 
     public static class AreaDiff extends DiffUtil.ItemCallback<Area> {

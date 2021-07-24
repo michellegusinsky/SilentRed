@@ -2,7 +2,6 @@ package com.example.silentred.activities;
 
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,75 +25,78 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.silentred.R;
-import com.example.silentred.database.AppDatabase;
-import com.example.silentred.database.LoadAreasSQL;
+
 import com.example.silentred.model.Area;
-import com.example.silentred.viewModels.AreasAndTimesViewModel;
 import com.example.silentred.xml.LoadAreasXML;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.example.silentred.database.LoadAreasSQL;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class SettingFrag extends Fragment implements OnClickListener  {
-    // Declare
+
+    // region members
     static final int PICK_CONTACT = 123;
     static final String fileName =("myPreferencesFile");
     public static SharedPreferences sp;
-    private Button btn;
     private String toSaveArea;
     private String toSaveEmergencyName;
     private String toSaveEmergencyNumber;
-    private Integer toSaveflashPerSecond;
+    private Integer toSaveFlashPerSecond;
     private Integer toSaveAreaPos;
     private boolean flashChanged=false;
     private boolean areaChanged=false;
     private boolean emergencyChanged=false;
+    // endregion
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        sp = getActivity().getSharedPreferences(fileName,MODE_PRIVATE);
+        if (getActivity() != null) {
+            sp = getActivity().getSharedPreferences(fileName, MODE_PRIVATE);
+        }
         return inflater.inflate(R.layout.setting_layout, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         view.findViewById(R.id.EmergencyContact_btn).setOnClickListener(this);
-        btn = view.findViewById(R.id.buttonSave);
+        Button btn = view.findViewById(R.id.buttonSave);
         EditText userText=view.findViewById(R.id.editTextTextPersonName);
         userText.setText(sp.getString("userName",""));
         btn.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                sp =getActivity().getSharedPreferences(fileName,MODE_PRIVATE);
-                SharedPreferences.Editor myEdit = sp.edit();
-                EditText userText=view.findViewById(R.id.editTextTextPersonName);
-                myEdit.putString("userName",userText.getText().toString());
-                if(flashChanged)
-                    myEdit.putInt("flashPerSecond",toSaveflashPerSecond);
-                if(areaChanged)
-                {
-                    myEdit.putString("Area", toSaveArea);
-                    myEdit.putInt("AreaPos", toSaveAreaPos);
+                if (getActivity() != null) {
+                    sp = getActivity().getSharedPreferences(fileName, MODE_PRIVATE);
+                    SharedPreferences.Editor myEdit = sp.edit();
+
+                    EditText userText = view.findViewById(R.id.editTextTextPersonName);
+                    myEdit.putString("userName", userText.getText().toString());
+                    if (flashChanged)
+                        myEdit.putInt("flashPerSecond", toSaveFlashPerSecond);
+                    if (areaChanged) {
+                        myEdit.putString("Area", toSaveArea);
+                        myEdit.putInt("AreaPos", toSaveAreaPos);
+                    }
+                    if (emergencyChanged) {
+                        myEdit.putString("EmergencyName", toSaveEmergencyName);
+                        myEdit.putString("EmergencyNumber", toSaveEmergencyNumber);
+                    }
+                    myEdit.apply();
+                    Toast toast = Toast.makeText(getContext(), "Preferences Saved Successfully", Toast.LENGTH_SHORT);
+                    toast.show();
                 }
-                if(emergencyChanged) {
-                    myEdit.putString("EmergencyName", toSaveEmergencyName);
-                    myEdit.putString("EmergencyNumber", toSaveEmergencyNumber);
-                }
-                myEdit.apply();
-                Toast toast=Toast.makeText(getContext(),"Preferences Saved Successfully",Toast.LENGTH_SHORT);
-                toast.show();
             }
         });
         final SeekBar mySeekBar = view.findViewById(R.id.seekBar);
+        if (getActivity() == null) return;
         sp =getActivity().getSharedPreferences(fileName,MODE_PRIVATE);
         TextView example=view.findViewById(R.id.seekBar_text);
         String text;
@@ -108,28 +110,22 @@ public class SettingFrag extends Fragment implements OnClickListener  {
                 String text;
                 text= ("Flash "+progress+" times per second");
                 example.setText(text);
-                toSaveflashPerSecond=progress;
+                toSaveFlashPerSecond =progress;
                 flashChanged=true;
             }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
         ArrayList<Area> arrayArea = LoadAreasXML.parseAreas(getContext());
-        ArrayList<String> arreyName = new ArrayList<String>();
-        int i=0;
+        ArrayList<String> arrayName = new ArrayList<>();
         for(Area area:arrayArea){
-            arreyName.add(area.getName());
+            arrayName.add(area.getName());
         }
-        String[] barArea=arreyName.toArray(new String[arreyName.size()]);
+        String[] barArea=arrayName.toArray(new String[arrayName.size()]);
 
         ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, barArea);
         // create a spinner
@@ -174,6 +170,7 @@ public class SettingFrag extends Fragment implements OnClickListener  {
         super.onActivityResult(reqCode, resultCode, data);
 
         if (reqCode == PICK_CONTACT) {
+            if (getActivity() == null) return;
             ContentResolver contentResolver = getActivity().getBaseContext().getContentResolver();
             String contactName = "";
             String hasNumber = "";
@@ -208,6 +205,7 @@ public class SettingFrag extends Fragment implements OnClickListener  {
                                     toSaveEmergencyName=contactName;
                                     toSaveEmergencyNumber=contactNumber;
                                     emergencyChanged=true;
+                                    if (getView() == null) return;
                                     TextView eName = getView().findViewById(R.id.contact_name_textView);
                                     TextView eNumber = getView().findViewById(R.id.contact_number_textView);
                                     eName.setText(contactName);

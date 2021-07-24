@@ -3,7 +3,6 @@ package com.example.silentred.database;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -13,7 +12,6 @@ import com.example.silentred.model.Area;
 import com.example.silentred.xml.LoadAreasXML;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,18 +63,6 @@ public abstract class AppDatabase extends RoomDatabase {
             });
         }
     };
-//////////////////////bar////////////////////////////
-    public static String[] getAreaNamesBAR(){
-        LiveData<List<Area>>arrayAreaLIVE=INSTANCE.getAreaDao().getAllAreas();
-        ArrayList<Area> arrayArea=new ArrayList<Area>(arrayAreaLIVE.getValue());
-        // String[] barArea=new String[arrayArea.size()];
-        String[] barArea=new String[arrayArea.size()];
-        int i=0;
-        for(Area area:arrayArea){
-            barArea[i]=area.name;
-        }
-        return barArea;
-    }
-    /////////////////////////////////////
+
     public static void destroyInstance() {INSTANCE = null;}
 }
