@@ -1,63 +1,95 @@
 <?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
 <areas>
     <area>
-        <name>Kiryat Bialik</name>
+        <name>Ashkelon</name>
+        <time>00:00:30</time>
+    </area>
+    <area>
+        <name>Be'er sheva</name>
         <time>00:01:00</time>
     </area>
     <area>
-        <name>Karmiel</name>
+        <name>Dimona</name>
         <time>00:01:00</time>
     </area>
     <area>
-        <name>Ein Gedi</name>
-        <time>00:03:00</time>
+        <name>Eraz</name>
+        <time>00:00:10</time>
     </area>
     <area>
-        <name>Otef Gaza</name>
+        <name>Gvolot</name>
         <time>00:00:15</time>
     </area>
     <area>
-        <name>United States</name>
-        <time>00:01:00</time>
+        <name>Haifa</name>
+        <time>00:03:00</time>
     </area>
     <area>
-        <name>Germany</name>
-        <time>00:01:00</time>
+        <name>Herzeliya</name>
+        <time>00:01:30</time>
     </area>
     <area>
-        <name>Jordan</name>
-        <time>00:01:00</time>
+        <name>Jerusalem</name>
+        <time>00:01:30</time>
     </area>
     <area>
-        <name>Brazil</name>
-        <time>00:01:00</time>
+        <name>Karmiel</name>
+        <time>00:03:00</time>
     </area>
     <area>
-        <name>New Zealand</name>
-        <time>00:01:00</time>
+        <name>Kfar Aza</name>
+        <time>00:00:10</time>
     </area>
     <area>
-        <name>China</name>
-        <time>00:01:00</time>
+        <name>Kfar Vradim</name>
+        <time>00:03:00</time>
     </area>
     <area>
-        <name>Thailand</name>
-        <time>00:01:00</time>
+        <name>Kfar Saba</name>
+        <time>00:01:30</time>
     </area>
     <area>
-        <name>Switzerland</name>
-        <time>00:01:00</time>
+        <name>Kissufim</name>
+        <time>00:00:10</time>
     </area>
     <area>
-        <name>Australia</name>
-        <time>00:01:00</time>
+        <name>Kiryat Bialik</name>
+        <time>00:03:00</time>
     </area>
     <area>
-        <name>Romania</name>
-        <time>00:01:00</time>
+        <name>Kiryat Malakhi</name>
+        <time>00:00:45</time>
     </area>
     <area>
-        <name>Mexico</name>
-        <time>00:01:00</time>
+        <name>Lehavim</name>
+        <time>00:00:45</time>
+    </area>
+    <area>
+        <name>Meitar</name>
+        <time>00:00:45</time>
+    </area>
+    <area>
+        <name>Modi'in</name>
+        <time>00:01:30</time>
+    </area>
+    <area>
+        <name>Nahal Oz</name>
+        <time>00:00:10</time>
+    </area>
+    <area>
+        <name>Netivot</name>
+        <time>00:00:30</time>
+    </area>
+    <area>
+        <name>Ofakim</name>
+        <time>00:00:45</time>
+    </area>
+    <area>
+        <name>Sderot city</name>
+        <time>00:00:15</time>
+    </area>
+    <area>
+        <name>Tel-Aviv</name>
+        <time>00:01:30</time>
     </area>
 </areas>
