@@ -26,6 +26,15 @@ public class LoadAreasSQL {
         return mAllAreas;
     }
 
+    public ArrayList<String> getAllAreasNames(){
+        ArrayList<Area> areas = new ArrayList<>(mAllAreas.getValue());
+        ArrayList<String> areasNames = new ArrayList<>(areas.size());
+        for (Area area : areas){
+            areasNames.add(area.name);
+        }
+        return areasNames;
+    }
+
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
     void insert(Area area) {

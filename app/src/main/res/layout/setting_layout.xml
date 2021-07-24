@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFAF2">
+    android:background="#987EEF">
 
     <LinearLayout
         android:id="@+id/sub_layout"
@@ -23,7 +22,8 @@
             android:id="@+id/alarm_rhythm_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Alarm Rhythm:"
+            android:text="@string/alarm_rhythm"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -39,7 +39,7 @@
             android:min="1"
             android:progress="1"
             android:progressTint="#FF2400"
-            android:thumbTint="#4b1223"
+            android:thumbTint="#090909"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,6 +81,7 @@
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,6 +110,7 @@
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -119,6 +121,7 @@
                 android:text="number"
                 android:textAlignment="center"
                 android:textSize="16sp"
+                android:textColor="@color/black"
                 android:textStyle="bold|italic" />
         </LinearLayout>
 
@@ -145,6 +148,7 @@
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -175,9 +179,10 @@
             android:id="@+id/username_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="UserName"
+            android:text="Your Name"
             android:textAlignment="center"
             android:textSize="24sp"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <EditText

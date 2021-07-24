@@ -25,6 +25,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.silentred.R;
+import com.example.silentred.database.LoadAreasSQL;
+
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -110,28 +113,32 @@ public class SettingFrag extends Fragment implements OnClickListener  {
 
             }
         });
-        String[] areas = { "Gaza village", "sderot", "China", "Japan", "Other"};
-        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, areas);
-        // create a spinner
-        Spinner spinner = view.findViewById(R.id.areas_spinner);
-        // add adapter to spinner
-        spinner.setAdapter(stringArrayAdapter);
-        // create listener and add to spinner
-        spinner.setSelection(sp.getInt("AreaPos",0));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // put code which recognize a selected element
-                toSaveArea=areas[position];
-                toSaveAreaPos=position;
-                areaChanged=true;
-            }
+        LoadAreasSQL repository = new LoadAreasSQL(getActivity().getApplication());
+        ArrayList<String> allAreasNames = repository.getAllAreasNames();
+        if (allAreasNames != null) {
+            String[] areasNames = (String[]) allAreasNames.toArray();
+            ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, areasNames);
+            // create a spinner
+            Spinner spinner = view.findViewById(R.id.areas_spinner);
+            // add adapter to spinner
+            spinner.setAdapter(stringArrayAdapter);
+            // create listener and add to spinner
+            spinner.setSelection(sp.getInt("AreaPos", 0));
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    // put code which recognize a selected element
+                    toSaveArea = areasNames[position];
+                    toSaveAreaPos = position;
+                    areaChanged = true;
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }
         TextView eName = view.findViewById(R.id.contact_name_textView);
         TextView eNumber = view.findViewById(R.id.contact_number_textView);
         eName.setText(sp.getString("EmergencyName",""));

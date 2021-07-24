@@ -4,4 +4,5 @@
     <string name="permlab_flashlight">flashlight Permissions for turn on the flash when there is red color notification</string>
     <string name="countDownTitle">Press to stop alarm</string>
     <string name="open_areas_and_times_to_enter_shelter">Open Areas and Times to enter shelter</string>
+    <string name="alarm_rhythm">Alarm Rhythm:</string>
 </resources>

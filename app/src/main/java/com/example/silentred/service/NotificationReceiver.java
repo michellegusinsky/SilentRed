@@ -52,22 +52,24 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         Log.i(RedColorNotificationListenerService.TAG,"MainActivity.NotificationReceiver: onReceive()-end");
     }
+
     public void sendingSMS(Context context) {
-        //////////////////////////
+
         SettingFrag.sp = context.getSharedPreferences(fileName, MODE_PRIVATE);
         contactName = SettingFrag.sp.getString("EmergencyName", "");
         contactNumber = SettingFrag.sp.getString("EmergencyNumber", "");
         userName = SettingFrag.sp.getString("userName","");
-        if (contactName == null || contactNumber == null || userName == null)
-            return;
-       // if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+        if (contactName == null || contactNumber == null || userName == null) return;
+        if (contactName.isEmpty() || contactNumber.isEmpty() || userName.isEmpty()) return;
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(contactNumber, null, "hello " + contactName + ", you are the emergency contact of" + userName + "and "+userName+" need your help", null, null);
 
             Toast.makeText(context, "SMS massage has sent to emergency contact", Toast.LENGTH_SHORT).show();
-        //}
-       // else{
-       //     System.out.println("#$%$%#^    there is no permission for sending sms");
-       // }
+        }
+        else{
+            System.out.println("#$%$%#^    there is no permission for sending sms");
+        }
     }
 }

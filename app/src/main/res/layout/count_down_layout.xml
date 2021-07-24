@@ -28,12 +28,11 @@
             android:id="@+id/stop_btn"
             android:layout_width="289dp"
             android:layout_height="277dp"
-
             android:layout_marginStart="60dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/round_btn"
             android:backgroundTint="#EEAF1616"
-            android:textSize="70sp"
+            android:textSize="50sp"
             tools:visibility="visible" />
 
         <Button
