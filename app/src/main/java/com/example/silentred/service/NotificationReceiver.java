@@ -24,6 +24,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     private FlashLightManager flashLightManager;
     private CountDownManager countDownManager;
 
+    public static Boolean countDownEnable=true;
+
     static final String fileName =("myPreferencesFile");
     private String contactNumber;
     private String contactName;
@@ -39,10 +41,13 @@ public class NotificationReceiver extends BroadcastReceiver {
             flashLightManager = new FlashLightManager(context, 50); // TODO: get the delayBlink according to user settings
             Thread flashTread = new Thread(flashLightManager);
             flashTread.start();
-            countDownManager = new CountDownManager();
-            Thread countDownThread = new Thread(countDownManager);
-            countDownThread.start();
+            if(countDownEnable) {
+                countDownManager = new CountDownManager(context);
+                Thread countDownThread = new Thread(countDownManager);
+                countDownThread.start();
+            }
             sendingSMS(context);
+
 
         }
         // stop button clicked received
@@ -60,14 +65,17 @@ public class NotificationReceiver extends BroadcastReceiver {
         userName = SettingFrag.sp.getString("userName","");
         if (contactName == null || contactNumber == null || userName == null)
             return;
-       // if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+        if(contactNumber.isEmpty()||contactName.isEmpty()||userName.isEmpty())
+            return;
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
             SmsManager sms = SmsManager.getDefault();
+            System.out.println("@@@@@@@@@@@@@@              "+contactNumber             );
             sms.sendTextMessage(contactNumber, null, "hello " + contactName + ", you are the emergency contact of" + userName + "and "+userName+" need your help", null, null);
 
             Toast.makeText(context, "SMS massage has sent to emergency contact", Toast.LENGTH_SHORT).show();
-        //}
-       // else{
-       //     System.out.println("#$%$%#^    there is no permission for sending sms");
-       // }
+        }
+        else{
+            System.out.println("#$%$%#^    there is no permission for sending sms");
+        }
     }
 }
