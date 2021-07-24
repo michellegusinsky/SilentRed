@@ -1,18 +1,26 @@
 package com.example.silentred.service;
 
-import com.example.silentred.activities.MainActivity;
+import android.content.Context;
 
-import java.sql.Time;
+import com.example.silentred.activities.MainActivity;
+import com.example.silentred.activities.SettingFrag;
+import com.example.silentred.model.Area;
+import com.example.silentred.xml.LoadAreasXML;
+
+import java.util.ArrayList;
 
 public class CountDownManager implements Runnable{
-    //Changed to String time
-    private String timeToRunAway="17";      //need to update from database
-    private Time t= new Time(0,1,30);
-    private String tt=t.toString();
+    private Context context;
+    public CountDownManager(Context context) {
+        this.context=context;
+    }
+
     @Override
     public void run() {
+
+        NotificationReceiver.countDownEnable=false;
         Integer time = new Integer(0);//=new Integer(timeToRunAway);
-        String[] arr=tt.split(":",3);
+        String[] arr=getTime().split(":",3);
         int state=0;
         for (String a : arr){
             switch(state){
@@ -52,5 +60,19 @@ public class CountDownManager implements Runnable{
             ttime=ttime-1;
         }
         MainActivity.countDownBtn.setText("RUN!");
+        NotificationReceiver.countDownEnable=true;
+    }
+
+    public String getTime()
+    {
+        ArrayList<Area> arrayArea = LoadAreasXML.parseAreas(context);
+        ArrayList<String> arreyTime=new ArrayList<String>();
+        //String[] barArea=arrayArea.toArray(new String[arrayArea.size()]);
+        int i=0;
+        for(Area area:arrayArea){
+            arreyTime.add(area.getTime());
+        }
+        String[] barArea=arreyTime.toArray(new String[arreyTime.size()]);
+        return barArea[SettingFrag.sp.getInt("AreaPos",0)];
     }
 }

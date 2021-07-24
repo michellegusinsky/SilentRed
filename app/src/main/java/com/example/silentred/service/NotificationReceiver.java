@@ -1,7 +1,6 @@
 package com.example.silentred.service;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,15 +18,20 @@ import com.example.silentred.activities.SettingFrag;
 import static android.content.Context.MODE_PRIVATE;
 
 public class NotificationReceiver extends BroadcastReceiver {
+
     public static final String intentNotificationReceivedAction = "com.example.silentred.NOTIFICATION_LISTENER";
     public static final String intentStopButtonClickedAction = "com.example.silentred.STOP_BUTTON_CLICKED";
-    private FlashLightManager flashLightManager;
-    private CountDownManager countDownManager;
+
+    public static Boolean countDownEnable=true; // enable only 1 count down thread at a time
 
     static final String fileName =("myPreferencesFile");
+
+    private FlashLightManager flashLightManager;
+    private CountDownManager countDownManager;
     private String contactNumber;
     private String contactName;
     private String userName;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,9 +43,11 @@ public class NotificationReceiver extends BroadcastReceiver {
             flashLightManager = new FlashLightManager(context, 50); // TODO: get the delayBlink according to user settings
             Thread flashTread = new Thread(flashLightManager);
             flashTread.start();
-            countDownManager = new CountDownManager();
-            Thread countDownThread = new Thread(countDownManager);
-            countDownThread.start();
+            if(countDownEnable) {
+                countDownManager = new CountDownManager();
+                Thread countDownThread = new Thread(countDownManager);
+                countDownThread.start();
+            }
             sendingSMS(context);
 
         }
@@ -52,7 +58,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         Log.i(RedColorNotificationListenerService.TAG,"MainActivity.NotificationReceiver: onReceive()-end");
     }
-
     public void sendingSMS(Context context) {
 
         SettingFrag.sp = context.getSharedPreferences(fileName, MODE_PRIVATE);
@@ -62,13 +67,14 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (contactName == null || contactNumber == null || userName == null) return;
         if (contactName.isEmpty() || contactNumber.isEmpty() || userName.isEmpty()) return;
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(contactNumber, null, "hello " + contactName + ", you are the emergency contact of" + userName + "and "+userName+" need your help", null, null);
 
             Toast.makeText(context, "SMS massage has sent to emergency contact", Toast.LENGTH_SHORT).show();
         }
-        else{
+       else{
             System.out.println("#$%$%#^    there is no permission for sending sms");
         }
     }

@@ -2,6 +2,7 @@ package com.example.silentred.activities;
 
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,14 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.silentred.R;
+import com.example.silentred.database.AppDatabase;
+import com.example.silentred.database.LoadAreasSQL;
+import com.example.silentred.model.Area;
+import com.example.silentred.viewModels.AreasAndTimesViewModel;
+import com.example.silentred.xml.LoadAreasXML;
+
+import java.util.ArrayList;
+import java.util.List;
 import com.example.silentred.database.LoadAreasSQL;
 
 import java.util.ArrayList;
@@ -113,32 +122,36 @@ public class SettingFrag extends Fragment implements OnClickListener  {
 
             }
         });
-        LoadAreasSQL repository = new LoadAreasSQL(getActivity().getApplication());
-        ArrayList<String> allAreasNames = repository.getAllAreasNames();
-        if (allAreasNames != null) {
-            String[] areasNames = (String[]) allAreasNames.toArray();
-            ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, areasNames);
-            // create a spinner
-            Spinner spinner = view.findViewById(R.id.areas_spinner);
-            // add adapter to spinner
-            spinner.setAdapter(stringArrayAdapter);
-            // create listener and add to spinner
-            spinner.setSelection(sp.getInt("AreaPos", 0));
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    // put code which recognize a selected element
-                    toSaveArea = areasNames[position];
-                    toSaveAreaPos = position;
-                    areaChanged = true;
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
+        ArrayList<Area> arrayArea = LoadAreasXML.parseAreas(getContext());
+        ArrayList<String> arreyName = new ArrayList<String>();
+        int i=0;
+        for(Area area:arrayArea){
+            arreyName.add(area.getName());
         }
+        String[] barArea=arreyName.toArray(new String[arreyName.size()]);
+
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, barArea);
+        // create a spinner
+        Spinner spinner = view.findViewById(R.id.areas_spinner);
+        // add adapter to spinner
+        spinner.setAdapter(stringArrayAdapter);
+        // create listener and add to spinner
+        spinner.setSelection(sp.getInt("AreaPos",0));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // put code which recognize a selected element
+                toSaveArea=barArea[position];
+                toSaveAreaPos=position;
+                areaChanged=true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         TextView eName = view.findViewById(R.id.contact_name_textView);
         TextView eNumber = view.findViewById(R.id.contact_number_textView);
         eName.setText(sp.getString("EmergencyName",""));
