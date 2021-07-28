@@ -5,6 +5,8 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import static com.example.silentred.common.Constants.intentNotificationReceivedAction;
+
 public class RedColorNotificationListenerService extends NotificationListenerService {
     public static final String TAG = "silentred";
     private final String redColorAppSubTextKey = "android.subText";
@@ -25,6 +27,7 @@ public class RedColorNotificationListenerService extends NotificationListenerSer
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+
         Log.i(TAG,"NLService: onNotificationPosted()-start");
         // checks if the notification is from red color app
         String redColorAppName = "redcolor";
@@ -34,7 +37,7 @@ public class RedColorNotificationListenerService extends NotificationListenerSer
                 String notificationText = sbn.getNotification().extras.get(redColorAppTextKey).toString();
 
                 Log.i(TAG, "ID :" + sbn.getId() + "\t" + sbn.getNotification().tickerText + "\t" + sbn.getPackageName());
-                Intent intent = new Intent(this, NotificationReceiver.class).setAction(NotificationReceiver.intentNotificationReceivedAction);
+                Intent intent = new Intent(this, NotificationReceiver.class).setAction(intentNotificationReceivedAction);
                 intent.putExtra(intentExtraNotificationEventKey, "onNotificationPosted :" + sbn.getPackageName() + "\n" + notificationSubText + "\n" + notificationText +"\n");
                 // send to notification receiver for handle the notification
                 sendBroadcast(intent);

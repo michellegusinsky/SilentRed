@@ -11,6 +11,8 @@ import android.widget.Button;
 import com.example.silentred.service.NotificationReceiver;
 import com.example.silentred.R;
 
+import static com.example.silentred.common.Constants.intentStopButtonClickedAction;
+
 public class CountDownFragment extends Fragment {
 
         @Override
@@ -25,7 +27,7 @@ public class CountDownFragment extends Fragment {
 
                 btn.setOnClickListener(btn_stop -> { // Called each time the button stop clickes
                         Intent intent = new Intent(getActivity(), NotificationReceiver.class);
-                        intent.setAction(NotificationReceiver.intentStopButtonClickedAction);
+                        intent.setAction(intentStopButtonClickedAction);
                         // send to notification receiver for stop the flash light
                         if (getActivity() != null) {
                                 getActivity().sendBroadcast(intent);

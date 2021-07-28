@@ -40,15 +40,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingFrag extends Fragment implements OnClickListener  {
 
     // region members
-    static final int PICK_CONTACT = 123;
-    static final String fileName =("myPreferencesFile");
+    private static final int PICK_CONTACT = 123;
+    private final String fileName =("myPreferencesFile");
     public static SharedPreferences sp;
-    private String toSaveArea;
+    private String userLocation;
     private String toSaveEmergencyName;
     private String toSaveEmergencyNumber;
-    private Integer toSaveFlashPerSecond;
-    private Integer toSaveAreaPos;
-    private boolean flashChanged=false;
+    private Integer flashPerSecond_seekBarProgress;
+    private Integer userLocationPosition;
+    private boolean flashFrequencyChanged =false;
     private boolean areaChanged=false;
     private boolean emergencyChanged=false;
     // endregion
@@ -56,7 +56,6 @@ public class SettingFrag extends Fragment implements OnClickListener  {
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         if (getActivity() != null) {
             sp = getActivity().getSharedPreferences(fileName, MODE_PRIVATE);
         }
@@ -65,11 +64,93 @@ public class SettingFrag extends Fragment implements OnClickListener  {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        // set listener to save btn
+        Button btnSave = view.findViewById(R.id.buttonSave);
+        setListenerSaveBtn(btnSave, view);
+
+        // set text to user name from SP file
+        EditText userNameEditText=view.findViewById(R.id.editTextTextPersonName);
+        userNameEditText.setText(sp.getString("userName",""));
+
+        // set seek bar
+        setSeekBar(view);
+
+        // set spinner (combo box)
+        setSpinnerOfAreas(view);
+
+        // Emergency contact
+        setEmergencyContactViews(view);
+
+    }
+
+    private void setEmergencyContactViews(View view){
+
         view.findViewById(R.id.EmergencyContact_btn).setOnClickListener(this);
-        Button btn = view.findViewById(R.id.buttonSave);
-        EditText userText=view.findViewById(R.id.editTextTextPersonName);
-        userText.setText(sp.getString("userName",""));
-        btn.setOnClickListener(new View.OnClickListener(){
+        TextView eName = view.findViewById(R.id.contact_name_textView);
+        TextView eNumber = view.findViewById(R.id.contact_number_textView);
+        eName.setText(sp.getString("EmergencyName",""));
+        eNumber.setText(sp.getString("EmergencyNumber",""));
+    }
+
+    private void setSpinnerOfAreas(View view){
+
+        ArrayList<Area> arrayArea = LoadAreasXML.parseAreas(getContext());
+        ArrayList<String> arrayAreasNames = new ArrayList<>();
+
+        for(Area area:arrayArea){
+            arrayAreasNames.add(area.getName());
+        }
+        String[] namesOfAreas = arrayAreasNames.toArray(new String[arrayAreasNames.size()]);
+
+        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, namesOfAreas);
+        // create a spinner
+        Spinner spinner = view.findViewById(R.id.areas_spinner);
+        // add adapter to spinner
+        spinner.setAdapter(stringArrayAdapter);
+        // create listener and add to spinner
+        spinner.setSelection(sp.getInt("AreaPos",0));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userLocation = namesOfAreas[position];
+                userLocationPosition = position;
+                areaChanged = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    private void setSeekBar(View view) {
+        final SeekBar mySeekBar = view.findViewById(R.id.seekBar);
+        if (getActivity() != null) {
+
+            TextView seekBarText = view.findViewById(R.id.seekBar_text);
+            String seekBarTextString = ("Flash " + sp.getInt("flashPerSecond", 1) + " times per second");
+            seekBarText.setText(seekBarTextString);
+            mySeekBar.setProgress(sp.getInt("flashPerSecond", 1));
+            mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    TextView seekBarTextView = view.findViewById(R.id.seekBar_text);
+                    String seekBarTextString = "Flash " + progress + " times per second";
+                    seekBarTextView.setText(seekBarTextString);
+                    flashPerSecond_seekBarProgress = progress;
+                    flashFrequencyChanged = true;
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
+    }
+
+    private void setListenerSaveBtn(Button btnSave, View view){
+        btnSave.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -79,11 +160,11 @@ public class SettingFrag extends Fragment implements OnClickListener  {
 
                     EditText userText = view.findViewById(R.id.editTextTextPersonName);
                     myEdit.putString("userName", userText.getText().toString());
-                    if (flashChanged)
-                        myEdit.putInt("flashPerSecond", toSaveFlashPerSecond);
+                    if (flashFrequencyChanged)
+                        myEdit.putInt("flashPerSecond", flashPerSecond_seekBarProgress);
                     if (areaChanged) {
-                        myEdit.putString("Area", toSaveArea);
-                        myEdit.putInt("AreaPos", toSaveAreaPos);
+                        myEdit.putString("Area", userLocation);
+                        myEdit.putInt("AreaPos", userLocationPosition);
                     }
                     if (emergencyChanged) {
                         myEdit.putString("EmergencyName", toSaveEmergencyName);
@@ -95,66 +176,7 @@ public class SettingFrag extends Fragment implements OnClickListener  {
                 }
             }
         });
-        final SeekBar mySeekBar = view.findViewById(R.id.seekBar);
-        if (getActivity() == null) return;
-        sp =getActivity().getSharedPreferences(fileName,MODE_PRIVATE);
-        TextView example=view.findViewById(R.id.seekBar_text);
-        String text;
-        text= ("Flash "+sp.getInt("flashPerSecond",1)+" times per second");
-        example.setText(text);
-        mySeekBar.setProgress(sp.getInt("flashPerSecond",1));
-        mySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                TextView example=view.findViewById(R.id.seekBar_text);
-                String text;
-                text= ("Flash "+progress+" times per second");
-                example.setText(text);
-                toSaveFlashPerSecond =progress;
-                flashChanged=true;
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        ArrayList<Area> arrayArea = LoadAreasXML.parseAreas(getContext());
-        ArrayList<String> arrayName = new ArrayList<>();
-        for(Area area:arrayArea){
-            arrayName.add(area.getName());
-        }
-        String[] barArea=arrayName.toArray(new String[arrayName.size()]);
-
-        ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_spinner_dropdown_item, barArea);
-        // create a spinner
-        Spinner spinner = view.findViewById(R.id.areas_spinner);
-        // add adapter to spinner
-        spinner.setAdapter(stringArrayAdapter);
-        // create listener and add to spinner
-        spinner.setSelection(sp.getInt("AreaPos",0));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // put code which recognize a selected element
-                toSaveArea=barArea[position];
-                toSaveAreaPos=position;
-                areaChanged=true;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        TextView eName = view.findViewById(R.id.contact_name_textView);
-        TextView eNumber = view.findViewById(R.id.contact_number_textView);
-        eName.setText(sp.getString("EmergencyName",""));
-        eNumber.setText(sp.getString("EmergencyNumber",""));
-
     }
-
 
     //this callback for the  button emergency contact btn
     @Override
